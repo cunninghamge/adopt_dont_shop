@@ -1,0 +1,15 @@
+<h1>Shelters</h1>
+<%= link_to 'New Shelter', '/shelters/new' %>
+<h2>Shelters with Applications Pending</h2>
+<section id='pending'%>
+  <% @shelters_with_apps.each do |shelter| %>
+    <%= link_to shelter.name, admin_shelter_path(shelter) %>
+  <% end %>
+</section>
+<% @shelters.each do |shelter| %>
+  <section id="shelter-<%=shelter.id%>">
+    <h2><%= link_to "#{shelter.name}", "shelters/#{shelter.id}" %></h2>
+    <a href="/shelters/<%= shelter.id %>/edit">Edit Shelter</a>
+    <%= link_to "Delete Shelter", "/shelters/#{shelter.id}", method: :delete %>
+  </section>
+<% end %>
