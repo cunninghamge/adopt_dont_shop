@@ -20,8 +20,11 @@ RSpec.describe "Admin Shelters Index" do
 
   it 'shows the name of every shelter with a pending application' do
     no_app = create(:shelter)
-    with_app_1 = create(:application_pet).pet.shelter
-    with_app_2 = create(:application_pet).pet.shelter
+    application_pet_1 = create(:application_pet, application: create(:application, status: "Pending"))
+    application_pet_2 = create(:application_pet, application: create(:application, status: "Pending"))
+    with_app_1 = application_pet_1.pet.shelter
+    with_app_2 = application_pet_2.pet.shelter
+
 
     visit admin_shelters_path
     within('#pending') do
@@ -32,13 +35,15 @@ RSpec.describe "Admin Shelters Index" do
   end
 
   it 'lists shelters with pending applications alphabetically' do
-    with_app_1 = create(:application_pet).pet.shelter
-    with_app_2 = create(:application_pet).pet.shelter
+    3.times {create(:application_pet, application: create(:application, status: "Pending"))}
 
     visit admin_shelters_path
 
     sorted_names = Shelter.order(:name).pluck(:name)
-    expect(sorted_names[0]).to appear_before(sorted_names[1])
+    within('#pending') do
+      expect(sorted_names[0]).to appear_before(sorted_names[1])
+      expect(sorted_names[1]).to appear_before(sorted_names[2])
+    end
   end
 
   it 'has links to the show page for each shelter' do
@@ -49,7 +54,6 @@ RSpec.describe "Admin Shelters Index" do
     Shelter.pluck(:name).each do |name|
       expect(page).to have_link(name)
     end
-
   end
 
   it 'links to the admin show page of each shelter' do
