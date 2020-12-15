@@ -24,12 +24,16 @@ RSpec.describe "Admin Shelters Show" do
       create(:pet, approximate_age: 1, shelter: @shelter)
       create(:pet, approximate_age: 3, shelter: @shelter)
 
+      visit admin_shelter_path(@shelter)
+
       expect(page).to have_content("Average Pet Age: 2")
     end
 
     it 'shows the number of adoptable pets at that shelter' do
       2.times {create(:pet, shelter: @shelter)}
       create(:pet, adoptable: false, shelter: @shelter)
+
+      visit admin_shelter_path(@shelter)
 
       expect(page).to have_content("Adoptable Pets: 2")
     end
