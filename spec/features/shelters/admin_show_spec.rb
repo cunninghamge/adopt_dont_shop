@@ -82,9 +82,9 @@ RSpec.describe "Admin Shelters Show" do
 
       visit admin_shelter_path(@shelter)
 
-      within("#pet-#{pet_1.id}") { expect(page).to have_content(pet_1.name)}
-      expect(page).not_to have_css("#pet-#{pet_2.id}")
-      expect(page).not_to have_css("#pet-#{pet_3.id}")
+      within("##{pet_1.name}-#{application_1.id}") { expect(page).to have_content(pet_1.name)}
+      expect(page).not_to have_css("#{pet_2.name}-#{application_2.id}")
+      expect(page).not_to have_css("#{pet_2.name}-#{application_2.id}")
     end
 
     it 'links to the show page of pending applications next to each pet to be approved/rejected' do
@@ -94,9 +94,9 @@ RSpec.describe "Admin Shelters Show" do
 
       visit admin_shelter_path(@shelter)
 
-      within("#pet-#{pet.id}") { expect(page).to have_link("View Application")}
+      within("##{pet.name}-#{application.id}") { expect(page).to have_link("View Application")}
 
-      within("#pet-#{pet.id}") { click_link("View Application")}
+      within("##{pet.name}-#{application.id}") { click_link("View Application")}
 
       expect(current_path).to eq(admin_path(application))
     end
