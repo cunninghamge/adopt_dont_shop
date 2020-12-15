@@ -65,8 +65,40 @@ RSpec.describe "Admin Shelters Show" do
   end
 
   describe 'action required section' do
-    it 'has a section titled "Action Required"'
-    it 'lists pets with a pending application that have not been marked "Approved" or "Rejected"'
-    it 'links to the show page of pending applications next to each pet to be approved/rejected'
+    it 'has a section titled "Action Required"' do
+      expect(page).to have_content("Action Required")
+    end
+
+    it 'lists pets with a pending application that have not been marked "Approved" or "Rejected"' do
+      pet_1 = create(:pet, shelter: @shelter)
+      pet_2 = create(:pet, shelter: @shelter)
+      pet_3 = create(:pet, shelter: @shelter)
+      application_1 = create(:application, status: "Pending")
+      application_2 = create(:application, status: "Rejected")
+      application_3 = create(:application, status: "Approved")
+      create(:application_pet, application: application_1, pet: pet_1)
+      create(:application_pet, application: application_2, pet: pet_2)
+      create(:application_pet, application: application_3, pet: pet_3)
+
+      visit admin_shelter_path(@shelter)
+
+      within("#pet-#{pet_1.id}") { expect(page).to have_content(pet_1.name)}
+      expect(page).not_to have_css("#pet-#{pet_2.id}")
+      expect(page).not_to have_css("#pet-#{pet_3.id}")
+    end
+
+    it 'links to the show page of pending applications next to each pet to be approved/rejected' do
+      pet = create(:pet, shelter: @shelter)
+      application = create(:application, status: "Pending")
+      create(:application_pet, application: application, pet: pet)
+
+      visit admin_shelter_path(@shelter)
+
+      within("#pet-#{pet.id}") { expect(page).to have_link("View Application")}
+
+      within("#pet-#{pet.id}") { click_link("View Application")}
+
+      expect(current_path).to eq(admin_path(application))
+    end
   end
 end
