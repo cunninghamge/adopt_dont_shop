@@ -56,5 +56,17 @@ describe Shelter, type: :model do
 
       expect(@shelter.adoptable_pet_count).to eq(2)
     end
+
+    it 'counts adopted pets'do
+      2.times do
+        application_pet = create(:application_pet, pet: create(:pet, shelter: @shelter))
+        application_pet.approve
+        application_pet.application.approve
+      end
+      create(:pet, adoptable: false, shelter: @shelter)
+      create(:pet, shelter: @shelter)
+
+      expect(@shelter.pets_adopted).to eq(2)
+    end
   end
 end

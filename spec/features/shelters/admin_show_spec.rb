@@ -45,6 +45,8 @@ RSpec.describe "Admin Shelters Show" do
         application_pet.application.approve
       end
 
+      visit admin_shelter_path(@shelter)
+
       expect(page).to have_content("Pets Adopted: 2")
     end
 
@@ -55,6 +57,8 @@ RSpec.describe "Admin Shelters Show" do
         application_pet.application.approve
       end
       create(:pet, adoptable: false, shelter: @shelter)
+
+      visit admin_shelter_path(@shelter)
 
       expect(page).to have_content("Pets Adopted: 2")
     end
