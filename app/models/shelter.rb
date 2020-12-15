@@ -21,4 +21,11 @@ class Shelter < ApplicationRecord
     .where("applications.status = 'Approved'")
     .count
   end
+
+  def pets_pending_action
+    pets.select("pets.name, applications.id AS app_id")
+    .joins(application_pets: [:application])
+    .where("applications.status = 'Pending'")
+    .where("application_pets.status IS NULL")
+  end
 end

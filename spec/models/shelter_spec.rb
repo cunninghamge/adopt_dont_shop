@@ -68,5 +68,37 @@ describe Shelter, type: :model do
 
       expect(@shelter.pets_adopted).to eq(2)
     end
+
+    it 'finds pets on pending applications that have not been approved or rejected' do
+      pet = create(:pet, shelter: @shelter)
+      create(:application, pets: [pet],status: "Pending")
+
+      expect(@shelter.pets_pending_action.pluck(:name)).to eq([pet.name])
+    end
+
+    it 'does not consider rejected applications as needing action' do
+      pet = create(:pet, shelter: @shelter)
+      application = create(:application, pets: [pet],status: "Rejected")
+
+      expect(@shelter.pets_pending_action).to be_empty
+    end
+
+    it 'does not consider pets as needing action if they have already been approved or rejected' do
+      pet_1 = create(:pet, shelter: @shelter)
+      pet_2 = create(:pet, shelter: @shelter)
+      create(:application_pet, pet: pet_1).approve
+      create(:application_pet, pet: pet_2).reject
+
+      expect(@shelter.pets_pending_action).to be_empty
+    end
+
+    it 'still consideres pets as needing approval if they have been approved on a separate application' do
+      pet = create(:pet, shelter: @shelter)
+      app_pet_1 = create(:application_pet, pet: pet, application: create(:application, status: "Pending"))
+      app_pet_2 = create(:application_pet, pet: pet, application: create(:application, status: "Pending"))
+      app_pet_1.approve
+
+      expect(@shelter.pets_pending_action.pluck(:name)).to eq([pet.name])
+    end
   end
 end
