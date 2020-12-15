@@ -1,0 +1,29 @@
+<h1>Application</h1>
+<h2>Status: <%= @application.status %>
+
+<h2>Applicant name: <%= @application.applicant_name %></h2>
+<h3>Applicant address:<br>
+  <%= "#{@application.street_address}" %><br>
+  <%= "#{@application.city}, #{@application.state} #{@application.zip}" %></h3>
+
+<section style='<%='display:none' if @application.status=="In Progress"%>'>
+  <p>Why I would make a good home for this pet or pets:</p>
+  <p><%= @application.description %></p>
+</section>
+
+<section id="application_pets">
+  <h3>Pets</h3>
+  <ul><% @application.application_pets.each do |application_pet| %>
+    <li id='pet-<%= application_pet.pet_id %>'>
+      <%= link_to application_pet.pet_name, pet_path(application_pet.pet_id) %>
+      <% if application_pet.status %>
+        <%= application_pet.status %>
+      <% elsif !application_pet.approvable? %>
+        <span>This pet has been approved for adoption by another applicant</span>
+        <%= button_to "Reject Pet", admin_path(@application, pet: application_pet.pet_id, status: :reject), method: :patch %>
+      <% else %>
+        <%= button_to "Approve Pet", admin_path(@application, pet: application_pet.pet_id, status: :approve), method: :patch %>
+        <%= button_to "Reject Pet", admin_path(@application, pet: application_pet.pet_id, status: :reject), method: :patch %>
+      <% end %></li>
+  <% end %></ul>
+</section>
