@@ -61,4 +61,14 @@ describe Pet, type: :model do
       expect(Pet.search("fluff")).to eq([fluff, fluffy, mrfluff])
     end
   end
+
+  describe 'instance methods' do
+    it 'changes adoptable to false when approved for adoption' do
+      pet = create(:pet)
+
+      pet.approve_adoption
+
+      expect(pet.adoptable).to eq(false)
+    end
+  end
 end
