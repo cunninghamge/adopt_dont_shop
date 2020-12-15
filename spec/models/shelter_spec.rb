@@ -48,5 +48,13 @@ describe Shelter, type: :model do
 
       expect(@shelter.average_pet_age).to eq(3)
     end
+
+    it 'counts adoptable pets'do
+      create(:pet, shelter: @shelter)
+      create(:pet, shelter: @shelter)
+      create(:pet, adoptable: false, shelter: @shelter)
+
+      expect(@shelter.adoptable_pet_count).to eq(2)
+    end
   end
 end
