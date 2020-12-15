@@ -7,4 +7,8 @@ class Shelter < ApplicationRecord
     .order(:name)
     .distinct
   end
+
+  def average_pet_age
+    pets.average(:approximate_age)
+  end
 end
