@@ -13,22 +13,6 @@ RSpec.describe ApplicationPet do
       expect(application_pet.status).to be_nil
     end
 
-    it 'can be approved' do
-      application_pet = create(:application_pet)
-
-      application_pet.approve
-
-      expect(application_pet.status).to eq("Approved")
-    end
-
-    it 'can be rejected' do
-      application_pet = create(:application_pet)
-
-      application_pet.reject
-
-      expect(application_pet.status).to eq("Rejected")
-    end
-
     it 'finds the name of its pet' do
       pet = create(:pet)
       application_pet = create(:application_pet, pet: pet)
@@ -53,14 +37,12 @@ RSpec.describe ApplicationPet do
     it 'is not approvable if the pet has been approved on another pending application' do
       pet_1 = create(:pet)
       pet_2 = create(:pet)
-      pet_3 = create(:pet)
       application_1 = create(:application, status: "Pending")
       application_pet_1 = create(:application_pet, application: application_1, pet: pet_1)
       application_pet_2 = create(:application_pet, application: application_1, pet: pet_2)
       application_2 = create(:application, status: "Pending")
       application_pet_3 = create(:application_pet, application: application_2, pet: pet_1)
-      application_pet_1.approve
-      application_1.approve
+      application_pet_1.update(status: :approved)
 
       expect(application_1.status).to eq("Pending")
       expect(application_pet_3.approvable?).to be(false)
@@ -75,11 +57,9 @@ RSpec.describe ApplicationPet do
       application_pet_2 = create(:application_pet, application: application_1, pet: pet_2)
       application_2 = create(:application, status: "Pending")
       application_pet_3 = create(:application_pet, application: application_2, pet: pet_1)
-      application_pet_1.approve
-      application_pet_2.reject
-      application_1.approve
+      application_pet_1.update(status: :approved)
+      application_1.update(status: "Rejected")
 
-      expect(application_1.status).to eq("Rejected")
       expect(application_pet_3.approvable?).to be(true)
     end
   end

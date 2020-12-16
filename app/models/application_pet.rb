@@ -1,15 +1,10 @@
 class ApplicationPet < ApplicationRecord
   belongs_to :application
   belongs_to :pet
+  after_update :evaluate
 
-  def approve
-    self[:status] = "Approved"
-    save
-  end
-
-  def reject
-    self[:status] = "Rejected"
-    save
+  def evaluate
+    application.evaluate
   end
 
   def pet_name

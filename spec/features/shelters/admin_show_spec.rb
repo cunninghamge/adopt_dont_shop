@@ -41,8 +41,7 @@ RSpec.describe "Admin Shelters Show" do
     it 'shows the number of pets that have been adopted' do
       2.times do
         application_pet = create(:application_pet, pet: create(:pet, shelter: @shelter))
-        application_pet.approve
-        application_pet.application.approve
+        application_pet.update(status: :approved)
       end
 
       visit admin_shelter_path(@shelter)
@@ -53,8 +52,7 @@ RSpec.describe "Admin Shelters Show" do
     it 'does not count pets that are created as not adoptable in adopted pets' do
       2.times do
         application_pet = create(:application_pet, pet: create(:pet, shelter: @shelter))
-        application_pet.approve
-        application_pet.application.approve
+        application_pet.update(status: :approved)
       end
       create(:pet, adoptable: false, shelter: @shelter)
 

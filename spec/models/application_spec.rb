@@ -24,8 +24,7 @@ RSpec.describe Application do
     it 'is approved when its pets are approved' do
       application = create(:application, status: "Pending")
       application_pet = create(:application_pet, application: application)
-      application_pet.approve
-      application.approve
+      application_pet.update(status: :approved)
 
       expect(application.status).to eq("Approved")
     end
@@ -34,13 +33,11 @@ RSpec.describe Application do
       application = create(:application, status: "Pending")
       2.times {create(:application_pet, application: application)}
 
-      application.application_pets[0].approve
-      application.approve
+      application.application_pets[0].update(status: :approved)
 
       expect(application.status).to eq("Pending")
 
-      application.application_pets[1].approve
-      application.approve
+      application.application_pets[1].update(status: :approved)
 
       expect(application.status).to eq("Approved")
     end
@@ -49,13 +46,11 @@ RSpec.describe Application do
       application = create(:application, status: "Pending")
       2.times {create(:application_pet, application: application)}
 
-      application.application_pets[0].approve
-      application.approve
+      application.application_pets[0].update(status: :approved)
 
       expect(application.status).to eq("Pending")
 
-      application.application_pets[1].reject
-      application.approve
+      application.application_pets[1].update(status: :rejected)
 
       expect(application.status).to eq("Rejected")
     end

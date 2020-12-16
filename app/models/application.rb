@@ -4,14 +4,12 @@ class Application < ApplicationRecord
 
   validates_presence_of :applicant_name, :street_address, :city, :state, :zip
 
-  def approve
-    if application_pets.all? {|pet| pet.status=="Approved"}
-      self[:status] = "Approved"
+  def evaluate
+    if application_pets.all? {|pet| pet.status=="approved"}
+      update(status: "Approved")
       pets.each {|pet| pet.approve_adoption}
-      save
-    elsif application_pets.any? {|pet| pet.status=="Rejected"}
-      self[:status] = "Rejected"
-      save
+    elsif application_pets.any? {|pet| pet.status=="rejected"}
+      update(status: "Rejected")
     end
   end
 end

@@ -60,8 +60,7 @@ describe Shelter, type: :model do
     it 'counts adopted pets'do
       2.times do
         application_pet = create(:application_pet, pet: create(:pet, shelter: @shelter))
-        application_pet.approve
-        application_pet.application.approve
+        application_pet.update(status: :approved)
       end
       create(:pet, adoptable: false, shelter: @shelter)
       create(:pet, shelter: @shelter)
@@ -86,8 +85,8 @@ describe Shelter, type: :model do
     it 'does not consider pets as needing action if they have already been approved or rejected' do
       pet_1 = create(:pet, shelter: @shelter)
       pet_2 = create(:pet, shelter: @shelter)
-      create(:application_pet, pet: pet_1).approve
-      create(:application_pet, pet: pet_2).reject
+      create(:application_pet, pet: pet_1).update(status: :approved)
+      create(:application_pet, pet: pet_2).update(status: :rejected)
 
       expect(@shelter.pets_pending_action).to be_empty
     end
@@ -96,7 +95,7 @@ describe Shelter, type: :model do
       pet = create(:pet, shelter: @shelter)
       app_pet_1 = create(:application_pet, pet: pet, application: create(:application, status: "Pending"))
       app_pet_2 = create(:application_pet, pet: pet, application: create(:application, status: "Pending"))
-      app_pet_1.approve
+      app_pet_1.update(status: :approved)
 
       expect(@shelter.pets_pending_action.pluck(:name)).to eq([pet.name])
     end
