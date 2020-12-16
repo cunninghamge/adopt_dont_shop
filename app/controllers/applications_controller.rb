@@ -7,7 +7,7 @@ class ApplicationsController < ApplicationController
     if application.save
       redirect_to application_path(application)
     else
-      flash[:notice] = "#{application_params.keys.find {|k| application_params[k]==""}.humanize} is a required field."
+      flash[:notice] = application.errors.full_messages
       render :new
     end
   end

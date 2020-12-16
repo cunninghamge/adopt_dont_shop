@@ -44,7 +44,7 @@ RSpec.describe "New Application Page" do
       fill_in("application[zip]", with: "40996")
       click_button(:submit)
 
-      expect(page).to have_content("Applicant name is a required field")
+      expect(page).to have_content("Applicant name can't be blank")
     end
 
     it 'address is required' do
@@ -56,7 +56,7 @@ RSpec.describe "New Application Page" do
       fill_in("application[zip]", with: "40996")
       click_button(:submit)
 
-      expect(page).to have_content("Street address is a required field")
+      expect(page).to have_content("Street address can't be blank")
     end
 
     it 'city is required' do
@@ -68,7 +68,7 @@ RSpec.describe "New Application Page" do
       fill_in("application[zip]", with: "40996")
       click_button(:submit)
 
-      expect(page).to have_content("City is a required field")
+      expect(page).to have_content("City can't be blank")
     end
 
     it 'state is required' do
@@ -80,7 +80,7 @@ RSpec.describe "New Application Page" do
       fill_in("application[zip]", with: "40996")
       click_button(:submit)
 
-      expect(page).to have_content("State is a required field")
+      expect(page).to have_content("State can't be blank")
     end
 
     it 'zip is required' do
@@ -92,7 +92,7 @@ RSpec.describe "New Application Page" do
       fill_in("application[state]", with: "NJ")
       click_button(:submit)
 
-      expect(page).to have_content("Zip is a required field")
+      expect(page).to have_content("Zip can't be blank")
     end
   end
 end
