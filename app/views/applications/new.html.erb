@@ -1,10 +1,15 @@
 <h1>New Application</h1>
 
-<%= form_for :application, url: applications_path do |f| %>
-  Applicant name: <%= f.text_field :applicant_name %><br>
-  Street address: <%= f.text_field :street_address %><br>
-  City:           <%= f.text_field :city %><br>
-  State:          <%= f.text_field :state %><br>
-  Zip code:       <%= f.text_field :zip %><br>
+<%= form_with model: @application, local: true do |f| %>
+  <%= f.label :applicant_name %>
+  <%= f.text_field :applicant_name %></br>
+  <%= f.label :street_address %>
+  <%= f.text_field :street_address %></br>
+  <%= f.label :city %>
+  <%= f.text_field :city %></br>
+  <%= f.label :state %>
+  <%= f.text_field :state %></br>
+  <%= f.label :zip %>
+  <%= f.text_field :zip %></br>
   <%= f.submit :submit %>
 <% end %>
