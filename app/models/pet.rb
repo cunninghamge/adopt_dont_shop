@@ -2,8 +2,8 @@ class Pet < ApplicationRecord
   belongs_to :shelter
   has_many :application_pets
   has_many :applications, through: :application_pets
-  validates_presence_of :name, :description, :approximate_age, :sex
 
+  validates_presence_of :name, :description, :approximate_age, :sex
   validates :approximate_age, numericality: {
               greater_than_or_equal_to: 0
             }
@@ -14,7 +14,13 @@ class Pet < ApplicationRecord
     where('LOWER(name) LIKE ?', "%#{name.downcase}%").where(adoptable: true)
   end
 
-  def approve_adoption
-    update(adoptable: false)
+  def self.approve_adoption
+    update_all(adoptable: false)
+  end
+
+  def available
+    applications.where("applications.status<>'Rejected'")
+                .where("application_pets.status='approved'")
+                .empty?
   end
 end
