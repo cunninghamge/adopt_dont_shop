@@ -1,8 +1,6 @@
 class ApplicationPetsController < ApplicationController
   def create
-    pet = Pet.find(params[:pet])
-    application = Application.find(params[:id])
-    ApplicationPet.create(pet: pet, application: application)
-    redirect_to application_path(application)
+    ApplicationPet.create(pet_id: params[:pet], application_id: params[:id])
+    redirect_to application_path(params[:id])
   end
 end
