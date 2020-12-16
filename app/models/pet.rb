@@ -11,11 +11,10 @@ class Pet < ApplicationRecord
   enum sex: [:female, :male]
 
   def self.search(name)
-    Pet.where('LOWER(name) LIKE ?', "%#{name.downcase}%")
+    where('LOWER(name) LIKE ?', "%#{name.downcase}%").where(adoptable: true)
   end
 
   def approve_adoption
-    self[:adoptable] = false
-    save
+    update(adoptable: false)
   end
 end

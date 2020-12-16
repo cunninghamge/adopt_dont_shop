@@ -17,7 +17,8 @@ class ApplicationPet < ApplicationRecord
 
   def separately_approved(id, pet_id)
     ApplicationPet.joins(:application)
-                  .where("applications.status='Pending'") .where("application_pets.status='Approved'")
+                  .where("applications.status='Pending'")
+                  .where("application_pets.status='approved'")
                   .where("application_pets.pet_id = ?", pet_id)
                   .where("application_pets.id <> ?", id)
                   .count == 0

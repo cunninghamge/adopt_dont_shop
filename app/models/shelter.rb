@@ -17,15 +17,15 @@ class Shelter < ApplicationRecord
   end
 
   def pets_adopted
-    pets.joins(application_pets: [:application])
-    .where("applications.status = 'Approved'")
-    .count
+    pets.joins(:applications)
+        .where("applications.status = 'Approved'")
+        .count
   end
 
   def pets_pending_action
     pets.select("pets.name, applications.id AS app_id")
-    .joins(:applications)
-    .where("applications.status = 'Pending'")
-    .where("application_pets.status IS NULL")
+        .joins(:applications)
+        .where("applications.status = 'Pending'")
+        .where("application_pets.status IS NULL")
   end
 end
