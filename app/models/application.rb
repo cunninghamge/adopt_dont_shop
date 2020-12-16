@@ -5,11 +5,19 @@ class Application < ApplicationRecord
   validates_presence_of :applicant_name, :street_address, :city, :state, :zip
 
   def evaluate
-    if application_pets.all? {|app_pet| app_pet.status=="approved"}
+    if all_pets_approved
       update(status: "Approved")
-      pets.each {|pet| pet.approve_adoption}
-    elsif application_pets.any? {|app_pet| app_pet.status=="rejected"}
+      pets.approve_adoption
+    elsif any_pets_rejected
       update(status: "Rejected")
     end
+  end
+
+  def all_pets_approved
+    application_pets.all? {|app_pet| app_pet.status=="approved"}
+  end
+
+  def any_pets_rejected
+    application_pets.any? {|app_pet| app_pet.status=="rejected"}
   end
 end

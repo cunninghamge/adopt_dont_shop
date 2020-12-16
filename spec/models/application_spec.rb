@@ -21,38 +21,96 @@ RSpec.describe Application do
   end
 
   describe 'instance methods' do
-    it 'is approved when its pets are approved' do
-      application = create(:application, status: "Pending")
-      application_pet = create(:application_pet, application: application)
-      application_pet.update(status: :approved)
+    describe '#all_pets_approved' do
+      before :each do
+        create(:application, pets: [create(:pet), create(:pet)], status: "Pending")
+      end
 
-      expect(application.status).to eq("Approved")
+      it 'returns true if all application_pets are approved' do
+        ApplicationPet.first.update(status: :approved)
+        ApplicationPet.last.update(status: :approved)
+
+        application = Application.first
+        expect(application.all_pets_approved).to eq(true)
+      end
+
+      it 'returns false if any application_pets are not approved' do
+        ApplicationPet.first.update(status: :approved)
+
+        application = Application.first
+        expect(application.all_pets_approved).to eq(false)
+      end
+
+      it 'returns false if any application_pets are rejected' do
+        ApplicationPet.first.update(status: :rejected)
+
+        application = Application.first
+        expect(application.all_pets_approved).to eq(false)
+      end
     end
 
-    it 'is approved when all of its pets are approved' do
-      application = create(:application, status: "Pending")
-      2.times {create(:application_pet, application: application)}
+    describe '#any_pets_rejected' do
+      before :each do
+        create(:application, pets: [create(:pet), create(:pet)], status: "Pending")
+      end
 
-      application.application_pets[0].update(status: :approved)
+      it 'returns true if any application_pets are rejected' do
+        ApplicationPet.first.update(status: :rejected)
 
-      expect(application.status).to eq("Pending")
+        application = Application.first
+        expect(application.any_pets_rejected).to eq(true)
+      end
 
-      application.application_pets[1].update(status: :approved)
+      it 'returns false if no application_pets are rejected' do
+        ApplicationPet.first.update(status: :approved)
 
-      expect(application.status).to eq("Approved")
+        application = Application.first
+        expect(application.any_pets_rejected).to eq(false)
+      end
     end
 
-    it 'is rejected if any of its pets are rejected' do
-      application = create(:application, status: "Pending")
-      2.times {create(:application_pet, application: application)}
+    describe '#evaluate' do
+      let(:application) {create(:application, status: "Pending")}
 
-      application.application_pets[0].update(status: :approved)
+      it 'is approved when all of its pets are approved' do
+        create(:application_pet, application: application, status: :approved)
 
-      expect(application.status).to eq("Pending")
+        Application.first.evaluate
 
-      application.application_pets[1].update(status: :rejected)
+        expect(Application.first.status).to eq("Approved")
+      end
 
-      expect(application.status).to eq("Rejected")
+      it 'is not approved until all pets are approved'do
+        2.times {create(:application_pet, application: application)}
+
+        ApplicationPet.first.update(status: :approved)
+
+        expect(Application.first.status).to eq("Pending")
+
+        ApplicationPet.last.update(status: :approved)
+
+        expect(Application.first.status).to eq("Approved")
+      end
+
+      it 'is rejected if a single pet is rejected' do
+        2.times {create(:application_pet, application: application)}
+
+        ApplicationPet.first.update(status: :rejected)
+
+        expect(Application.first.status).to eq("Rejected")
+      end
+
+      it 'is rejected if any of its pets are rejected' do
+        2.times {create(:application_pet, application: application)}
+
+        ApplicationPet.first.update(status: :approved)
+
+        expect(Application.first.status).to eq("Pending")
+
+        ApplicationPet.last.update(status: :rejected)
+
+        expect(Application.first.status).to eq("Rejected")
+      end
     end
   end
 end
