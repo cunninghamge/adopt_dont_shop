@@ -1,26 +1,12 @@
 class ApplicationPet < ApplicationRecord
   belongs_to :application
   belongs_to :pet
+
   after_update :evaluate
+  delegate :evaluate, to: :application
+  delegate :name, to: :pet, prefix: true
 
-  def evaluate
-    application.evaluate
-  end
-
-  def pet_name
-    pet.name
-  end
-
-  def approvable?
-    pet.adoptable && separately_approved(id, pet.id)
-  end
-
-  def separately_approved(id, pet_id)
-    ApplicationPet.joins(:application)
-                  .where("applications.status='Pending'")
-                  .where("application_pets.status='approved'")
-                  .where("application_pets.pet_id = ?", pet_id)
-                  .where("application_pets.id <> ?", id)
-                  .count == 0
+  def approvable
+    pet.adoptable && pet.available
   end
 end

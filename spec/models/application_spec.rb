@@ -23,7 +23,7 @@ RSpec.describe Application do
   describe 'instance methods' do
     describe '#all_pets_approved' do
       before :each do
-        create(:application, pets: [create(:pet), create(:pet)], status: "Pending")
+        @application = create(:application, pets: [create(:pet), create(:pet)], status: "Pending")
       end
 
       it 'returns true if all application_pets are approved' do

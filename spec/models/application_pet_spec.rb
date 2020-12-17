@@ -7,31 +7,28 @@ RSpec.describe ApplicationPet do
   end
 
   describe 'instance methods' do
-    it 'does not have a status on creation' do
-      application_pet = create(:application_pet)
+    before :each do
+      @application_pet = create(:application_pet, application: create(:application, status: "Pending"))
+    end
 
-      expect(application_pet.status).to be_nil
+    it 'does not have a status on creation' do
+      expect(@application_pet.status).to be_nil
     end
 
     it 'finds the name of its pet' do
-      pet = create(:pet)
-      application_pet = create(:application_pet, pet: pet)
-
-      expect(application_pet.pet_name).to eq(pet.name)
+      expect(@application_pet.pet_name).to eq(@application_pet.pet.name)
     end
 
     it 'is approvable if its pet is adoptable' do
-      pet = create(:pet)
-      application_pet = create(:application_pet, pet: pet)
-
-      expect(application_pet.approvable?).to be(true)
+      expect(@application_pet.approvable).to be(true)
     end
 
     it 'is not approvable if its pet is not adoptable' do
       pet = create(:pet, adoptable: false)
-      application_pet = create(:application_pet, pet: pet)
+      application = create(:application, status: "Pending")
+      application_pet = create(:application_pet, pet: pet, application: application)
 
-      expect(application_pet.approvable?).to be(false)
+      expect(application_pet.approvable).to be(false)
     end
 
     it 'is not approvable if the pet has been approved on another pending application' do
@@ -45,7 +42,7 @@ RSpec.describe ApplicationPet do
       application_pet_1.update(status: :approved)
 
       expect(application_1.status).to eq("Pending")
-      expect(application_pet_3.approvable?).to be(false)
+      expect(application_pet_3.approvable).to be(false)
     end
 
     it 'is approvable if the pet has been approved on separate rejected application' do
@@ -60,7 +57,7 @@ RSpec.describe ApplicationPet do
       application_pet_1.update(status: :approved)
       application_1.update(status: "Rejected")
 
-      expect(application_pet_3.approvable?).to be(true)
+      expect(application_pet_3.approvable).to be(true)
     end
   end
 end
