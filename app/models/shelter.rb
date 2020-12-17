@@ -1,5 +1,5 @@
 class Shelter < ApplicationRecord
-  has_many :pets
+  has_many :pets, dependent: :destroy
 
   def self.shelters_with_pending_apps
     joins(pets: [:applications])
