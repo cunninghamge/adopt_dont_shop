@@ -1,5 +1,4 @@
 class PetsController < ApplicationController
-
   def index
     @pets = Pet.all
   end
@@ -13,19 +12,17 @@ class PetsController < ApplicationController
   end
 
   def update
-    pet = Pet.find(params[:id])
-    pet.update(pets_params)
-    redirect_to "/pets/#{pet.id}"
+    Pet.find(params[:id]).update(pets_params)
+    redirect_to pet_path(params[:id])
   end
 
   def destroy
     Pet.destroy(params[:id])
-    redirect_to '/pets'
+    redirect_to pets_path
   end
 
   private
   def pets_params
     params.permit(:image, :name, :description, :approximate_age, :sex, :adoptable)
   end
-
 end

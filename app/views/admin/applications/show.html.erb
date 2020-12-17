@@ -9,10 +9,10 @@
         <%= application_pet.status.capitalize %>
       <% elsif !application_pet.approvable %>
         <span>This pet has been approved for adoption by another applicant</span>
-        <%= button_to "Reject Pet", admin_path(@application, pet: application_pet.pet_id, status: :rejected), method: :patch %>
+        <%= button_to "Reject Pet", admin_application_pet_path(application_pet, status: :rejected), method: :patch %>
       <% else %>
-        <%= button_to "Approve Pet", admin_path(@application, pet: application_pet.pet_id, status: :approved), method: :patch %>
-        <%= button_to "Reject Pet", admin_path(@application, pet: application_pet.pet_id, status: :rejected), method: :patch %>
+        <%= button_to "Approve Pet", admin_application_pet_path(application_pet, status: :approved), method: :patch %>
+        <%= button_to "Reject Pet", admin_application_pet_path(application_pet, status: :rejected), method: :patch %>
       <% end %></li>
   <% end %></ul>
 </section>

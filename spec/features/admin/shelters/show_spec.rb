@@ -96,7 +96,7 @@ RSpec.describe "Admin Shelters Show" do
 
       within("##{pet.name}-#{application.id}") { click_link("View Application")}
 
-      expect(current_path).to eq(admin_path(application))
+      expect(current_path).to eq(admin_application_path(application))
     end
   end
 end

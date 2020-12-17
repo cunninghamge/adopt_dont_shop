@@ -17,7 +17,7 @@
   <ul><% @shelter.pets_pending_action.each do |pet| %>
     <li id='<%= "#{pet.name}-#{pet.app_id}" %>'>
       <p><%= pet.name %>
-        <%= link_to "View Application", admin_path(pet.app_id) %></p>
+        <%= link_to "View Application", admin_application_path(pet.app_id) %></p>
     </li>
   <% end %></ul?
 </section>
