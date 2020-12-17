@@ -1,8 +1,8 @@
 class Shelter < ApplicationRecord
-  has_many :pets
+  has_many :pets, dependent: :destroy
 
   def self.shelters_with_pending_apps
-    joins(pets: [:application_pets, :applications])
+    joins(pets: [:applications])
     .where("applications.status = 'Pending'")
     .order(:name)
     .distinct
@@ -17,15 +17,15 @@ class Shelter < ApplicationRecord
   end
 
   def pets_adopted
-    pets.joins(application_pets: [:application])
-    .where("applications.status = 'Approved'")
-    .count
+    pets.joins(:applications)
+        .where("applications.status = 'Approved'")
+        .count
   end
 
   def pets_pending_action
     pets.select("pets.name, applications.id AS app_id")
-    .joins(application_pets: [:application])
-    .where("applications.status = 'Pending'")
-    .where("application_pets.status IS NULL")
+        .joins(:applications)
+        .where("applications.status = 'Pending'")
+        .where("application_pets.status IS NULL")
   end
 end

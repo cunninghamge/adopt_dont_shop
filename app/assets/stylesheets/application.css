@@ -52,6 +52,16 @@ header {
 
 }
 
+.notice {
+  background-color: lightpink;
+  color: red;
+  font-size: 25px;
+  display: inline-block;
+  border-radius: 25px;
+  text-align: left;
+  padding: 10px 40px;
+}
+
 * {
   box-sizing: border-box;
 }

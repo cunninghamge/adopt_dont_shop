@@ -1,14 +1,15 @@
 class ApplicationsController < ApplicationController
   def new
+    @application = Application.new
   end
 
   def create
-    application = Application.new(application_params)
-    if application.save
-      redirect_to application_path(application)
+    @application = Application.new(application_params)
+    if @application.save
+      redirect_to application_path(@application)
     else
-      flash[:notice] = "#{application_params.keys.find {|k| application_params[k]==""}.humanize} is a required field."
-      render :new
+      flash.now[:notice] = @application.errors.full_messages
+      render :new, obj: @application
     end
   end
 
@@ -25,6 +26,6 @@ class ApplicationsController < ApplicationController
 
   private
   def application_params
-    params[:application].permit(:applicant_name, :street_address, :city, :state, :zip)
+    params.require(:application).permit(:applicant_name, :street_address, :city, :state, :zip)
   end
 end
