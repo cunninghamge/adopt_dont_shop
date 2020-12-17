@@ -11,9 +11,18 @@ class Pet < ApplicationRecord
   enum sex: [:female, :male]
 
   scope :adoptable, -> { where(adoptable: true) }
+  scope :adopted,-> { joins(:applications).merge(Application.status_is("Approved"))}
 
   def self.count_adoptable
     adoptable.count
+  end
+
+  def self.count_adopted
+    adopted.count
+  end
+
+  def self.average_age
+    average(:approximate_age)
   end
 
   def self.search(name)

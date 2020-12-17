@@ -2,22 +2,14 @@ class Shelter < ApplicationRecord
   has_many :pets, dependent: :destroy
 
   delegate :count_adoptable, to: :pets
+  delegate :count_adopted, to: :pets
+  delegate :average_age, to: :pets, prefix: true
 
   def self.shelters_with_pending_apps
     joins(pets: [:applications])
     .where("applications.status = 'Pending'")
     .order(:name)
     .distinct
-  end
-
-  def average_pet_age
-    pets.average(:approximate_age)
-  end
-
-  def pets_adopted
-    pets.joins(:applications)
-        .where("applications.status = 'Approved'")
-        .count
   end
 
   def pets_pending_action

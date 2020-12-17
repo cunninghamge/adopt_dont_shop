@@ -46,7 +46,7 @@ describe Shelter, type: :model do
       create(:pet, approximate_age: 2, shelter: @shelter)
       create(:pet, approximate_age: 4, shelter: @shelter)
 
-      expect(@shelter.average_pet_age).to eq(3)
+      expect(@shelter.pets_average_age).to eq(3)
     end
 
     it 'counts adoptable pets'do
@@ -65,7 +65,7 @@ describe Shelter, type: :model do
       create(:pet, adoptable: false, shelter: @shelter)
       create(:pet, shelter: @shelter)
 
-      expect(@shelter.pets_adopted).to eq(2)
+      expect(@shelter.count_adopted).to eq(2)
     end
 
     it 'finds pets on pending applications that have not been approved or rejected' do

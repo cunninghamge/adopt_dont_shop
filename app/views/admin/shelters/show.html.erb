@@ -8,9 +8,9 @@
 <%= button_to "Delete Shelter", "/shelters/#{@shelter.id}", method: :delete %>
 <section id="statistics">
   <h3>Statistics</h3>
-  <p>Average Pet Age: <%= @shelter.average_pet_age %></p>
+  <p>Average Pet Age: <%= @shelter.pets_average_age %></p>
   <p>Adoptable Pets: <%= @shelter.count_adoptable %></p>
-  <p>Pets Adopted: <%= @shelter.pets_adopted %></p>
+  <p>Pets Adopted: <%= @shelter.count_adopted %></p>
 </section>
 <section id='action_required'>
   <h3>Action Required</h3>
