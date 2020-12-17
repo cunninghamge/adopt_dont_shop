@@ -54,7 +54,7 @@ describe Shelter, type: :model do
       create(:pet, shelter: @shelter)
       create(:pet, adoptable: false, shelter: @shelter)
 
-      expect(@shelter.adoptable_pet_count).to eq(2)
+      expect(@shelter.count_adoptable).to eq(2)
     end
 
     it 'counts adopted pets'do
