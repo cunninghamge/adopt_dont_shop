@@ -1,15 +1,4 @@
-<h1>Application</h1>
-<h2>Status: <%= @application.status %>
-
-<h2>Applicant name: <%= @application.applicant_name %></h2>
-<h3>Applicant address:<br>
-  <%= "#{@application.street_address}" %><br>
-  <%= "#{@application.city}, #{@application.state} #{@application.zip}" %></h3>
-
-<section style='<%='display:none' if @application.status=="In Progress"%>'>
-    <p>Why I would make a good home for this pet or pets:</p>
-    <p><%= @application.description %></p>
-</section>
+<%= render './layouts/shared/application_show' %>
 
 <section id="application_pets">
   <h3>Pets</h3>

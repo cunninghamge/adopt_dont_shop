@@ -4,8 +4,8 @@ class Admin::ApplicationsController < ApplicationController
   end
 
   def update
-    application = Application.find(params[:id])
-    ApplicationPet.find_by(application_id: application, pet_id: params[:pet]).update(status: params[:status])
-    redirect_to admin_path(application)
+    application_pet = ApplicationPet.find_by(application_id: params[:id], pet_id: params[:pet])
+    application_pet.update(status: params[:status])
+    redirect_to admin_path(params[:id])
   end
 end
