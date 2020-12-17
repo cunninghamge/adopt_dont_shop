@@ -11,7 +11,11 @@ class Pet < ApplicationRecord
   enum sex: [:female, :male]
 
   scope :adoptable, -> { where(adoptable: true) }
-  scope :adopted,-> { joins(:applications).merge(Application.status_is("Approved"))}
+  scope :adopted,-> { joins(:applications).where("applications.status = 'Approved'")}
+
+  def self.search(name)
+    where('LOWER(name) LIKE ?', "%#{name.downcase}%").adoptable
+  end
 
   def self.count_adoptable
     adoptable.count
@@ -25,12 +29,15 @@ class Pet < ApplicationRecord
     average(:approximate_age)
   end
 
-  def self.search(name)
-    where('LOWER(name) LIKE ?', "%#{name.downcase}%").adoptable
-  end
-
   def self.approve_adoption
     update_all(adoptable: false)
+  end
+
+  def self.pending_action
+    select("pets.name, application_id")
+    .joins(:applications)
+    .where("applications.status = 'Pending'")
+    .where("application_pets.status IS NULL")
   end
 
   def available
