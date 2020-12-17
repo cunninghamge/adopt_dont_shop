@@ -4,6 +4,8 @@ class Application < ApplicationRecord
 
   validates_presence_of :applicant_name, :street_address, :city, :state, :zip
 
+  scope :status_is,->(status) { where(status: status)}
+
   def evaluate
     if all_pets_approved
       update(status: "Approved")
