@@ -16,7 +16,7 @@
   <% end %>
   <% @adoptable_pets.each do |pet| %>
     <section id="pet-<%= pet.id %>"><%= link_to pet.name, pet_path(pet) %><br>
-    <%= button_to "Adopt this Pet", application_pets_path(pet: pet) %></section>
+    <%= button_to "Adopt this Pet", application_pet_path(pet: pet) %></section>
   <% end unless @adoptable_pets == nil %>
 </section>
 

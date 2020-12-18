@@ -7,7 +7,7 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
 
       expect(page).to have_button("Approve Pet")
     end
@@ -17,11 +17,11 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
-
+      visit admin_application_path(application)
+      
       within("#pet-#{pet_1.id}") {click_on "Approve Pet"}
 
-      expect(current_path).to eq(admin_path(application))
+      expect(current_path).to eq(admin_application_path(application))
     end
 
     it 'shows if a pet has been approved' do
@@ -29,7 +29,7 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Approve Pet"}
 
       within("#pet-#{pet_1.id}") do
@@ -43,7 +43,7 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
 
       expect(page).to have_button("Reject")
     end
@@ -53,10 +53,10 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Reject Pet"}
 
-      expect(current_path).to eq(admin_path(application))
+      expect(current_path).to eq(admin_application_path(application))
     end
 
     it 'shows if a pet has been rejected' do
@@ -64,7 +64,7 @@ describe 'Admin Applications Show page' do
       pet_2 = create(:pet)
       application = create(:application, pets: [pet_1, pet_2], status: "Pending")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Reject Pet"}
 
       within("#pet-#{pet_1.id}") do
@@ -79,10 +79,10 @@ describe 'Admin Applications Show page' do
       application_1 = create(:application, pets: [pet, pet_2], status: "Pending")
       application_2 = create(:application, pets: [pet], status: "Pending")
 
-      visit admin_path(application_1)
+      visit admin_application_path(application_1)
       within("#pet-#{pet.id}") {click_on "Approve Pet"}
 
-      visit admin_path(application_2)
+      visit admin_application_path(application_2)
       within("#pet-#{pet.id}") do
         expect(page).not_to have_content("Approved")
         expect(page).not_to have_content("Rejected")
@@ -95,10 +95,10 @@ describe 'Admin Applications Show page' do
       application_1 = create(:application, pets: [pet], status: "Pending")
       application_2 = create(:application, pets: [pet], status: "Pending")
 
-      visit admin_path(application_1)
+      visit admin_application_path(application_1)
       within("#pet-#{pet.id}") {click_on "Reject Pet"}
 
-      visit admin_path(application_2)
+      visit admin_application_path(application_2)
       within("#pet-#{pet.id}") do
         expect(page).not_to have_content("Approved")
         expect(page).to have_button("Approve Pet")
@@ -112,10 +112,10 @@ describe 'Admin Applications Show page' do
       application_1 = create(:application, pets: [pet], status: "Pending")
       application_2 = create(:application, pets: [pet], status: "Pending")
 
-      visit admin_path(application_1)
+      visit admin_application_path(application_1)
       within("#pet-#{pet.id}") {click_on "Approve Pet"}
 
-      visit admin_path(application_2)
+      visit admin_application_path(application_2)
 
       within("#pet-#{pet.id}") do
         expect(page).to have_content("This pet has been approved for adoption by another applicant")
@@ -131,7 +131,7 @@ describe 'Admin Applications Show page' do
       pet_1 = create(:pet, applications: [application])
       pet_2 = create(:pet, applications: [application])
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Approve Pet"}
 
       expect(page).to have_content("Status: Pending")
@@ -146,7 +146,7 @@ describe 'Admin Applications Show page' do
       pet_1 = create(:pet, applications: [application])
       pet_2 = create(:pet, applications: [application])
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Reject Pet"}
 
       expect(page).to have_content("Status: Rejected")
@@ -157,7 +157,7 @@ describe 'Admin Applications Show page' do
       pet_1 = create(:pet, applications: [application])
       pet_2 = create(:pet, applications: [application])
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet_1.id}") {click_on "Approve Pet"}
 
       expect(page).to have_content("Status: Pending")
@@ -174,7 +174,7 @@ describe 'Admin Applications Show page' do
       visit pet_path(pet)
       expect(page).to have_content("Adoption Status: true")
 
-      visit admin_path(application)
+      visit admin_application_path(application)
       within("#pet-#{pet.id}") {click_on "Approve Pet"}
 
       visit pet_path(pet)

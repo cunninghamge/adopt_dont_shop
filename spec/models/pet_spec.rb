@@ -82,7 +82,7 @@ describe Pet, type: :model do
 
     it 'pets are available if they have not been approved on another application' do
       pet = Pet.find(pet_1.id)
-      expect(pet.available).to be(true)
+      expect(pet.reserved).to be(false)
     end
 
     it 'pets are available if they have been approved on a rejected application' do
@@ -90,22 +90,14 @@ describe Pet, type: :model do
       ApplicationPet.find_by(pet: pet_2).update(status: :rejected)
 
       pet = Pet.find(pet_1.id)
-      expect(pet.available).to be(true)
+      expect(pet.reserved).to be(false)
     end
 
     it 'pets are not available if they have been approved on a pending application' do
       ApplicationPet.find_by(pet: pet_1).update(status: :approved)
 
       pet = Pet.find(pet_1.id)
-      expect(pet.available).to be(false)
-    end
-
-    it 'pets are not available if they have been approved on an approved application' do
-      ApplicationPet.find_by(pet: pet_1).update(status: :approved)
-      ApplicationPet.find_by(pet: pet_2).update(status: :approved)
-
-      pet = Pet.find(pet_1.id)
-      expect(pet.available).to be(false)
+      expect(pet.reserved).to be(true)
     end
   end
 end
