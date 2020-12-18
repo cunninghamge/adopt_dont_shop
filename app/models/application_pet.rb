@@ -7,6 +7,6 @@ class ApplicationPet < ApplicationRecord
   delegate :name, to: :pet, prefix: true
 
   def approvable
-    pet.adoptable && pet.available
+    pet.adoptable && !pet.reserved
   end
 end

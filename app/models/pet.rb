@@ -10,6 +10,8 @@ class Pet < ApplicationRecord
 
   enum sex: [:female, :male]
 
+  delegate :reserved, to: :applications
+
   scope :adoptable, -> { where(adoptable: true) }
   scope :adopted,-> { joins(:applications).where("applications.status = 'Approved'")}
 
@@ -34,15 +36,9 @@ class Pet < ApplicationRecord
   end
 
   def self.pending_action
-    select("pets.name, application_id")
+    select("name, application_id")
     .joins(:applications)
     .where("applications.status = 'Pending'")
     .where("application_pets.status IS NULL")
-  end
-
-  def available
-    applications.where("applications.status<>'Rejected'")
-                .where("application_pets.status='approved'")
-                .empty?
   end
 end
